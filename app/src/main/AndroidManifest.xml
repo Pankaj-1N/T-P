@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.tp">
 
-    <!-- ✅ Needed for Firebase -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
         android:supportsRtl="true"
-        android:label="T&amp;P App"
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
         android:theme="@style/Theme.TP">
 
-        <!-- Launcher Activity -->
+        <!-- Launcher -->
         <activity
-            android:name=".ui.auth.LoginActivity"
+            android:name="com.example.tp.ui.auth.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,25 +22,25 @@
         </activity>
 
         <!-- Dashboards -->
-        <activity android:name=".AdminDashboardActivity" />
-        <activity android:name=".StudentDashboardActivity" />
+        <activity
+            android:name="com.example.tp.AdminDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.tp.StudentDashboardActivity"
+            android:exported="false" />
 
         <!-- Admin feature screens -->
-        <activity android:name=".ManageNoticesActivity" />
-        <activity android:name=".NoticesActivity" />
+        <activity android:name="com.example.tp.ManageNoticesActivity" android:exported="false" />
+        <activity android:name="com.example.tp.ManagePlacementsActivity" android:exported="false" />
+        <activity android:name="com.example.tp.ManageQAActivity" android:exported="false" />
+        <activity android:name="com.example.tp.ManageStudentsActivity" android:exported="false" />
+        <activity android:name="com.example.tp.NoticesActivity" android:exported="false" />
+        <activity android:name="com.example.tp.PlacementRecordsActivity" android:exported="false" />
+        <activity android:name="com.example.tp.QAManagementActivity" android:exported="false" />
 
-        <activity android:name=".ManagePlacementsActivity" />
-        <activity android:name=".PlacementRecordsActivity" />
-
-        <activity android:name=".ManageQAActivity" />
-        <activity android:name=".QAManagementActivity" />
-
-        <activity android:name=".ManageStudentsActivity" />
-        <activity android:name=".StudentsActivity" />
-
-        <!-- Others -->
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".ProfileActivity" />
+        <!-- Shared -->
+        <activity android:name="com.example.tp.SettingsActivity" android:exported="false" />
+        <activity android:name="com.example.tp.ProfileActivity" android:exported="false" />
 
     </application>
 </manifest>

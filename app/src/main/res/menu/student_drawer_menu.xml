@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/nav_profile"      android:title="@string/menu_profile" />
+
+    <item android:id="@+id/nav_syllabus"     android:title="@string/menu_syllabus" />
+    <item android:id="@+id/nav_mock_tests"   android:title="@string/menu_mock_tests" />
+    <item android:id="@+id/nav_practice"     android:title="@string/menu_practice" />
+    <item android:id="@+id/nav_notices"      android:title="@string/menu_notices" />
+    <item android:id="@+id/nav_companies"    android:title="@string/menu_companies_roles" />
+    <item android:id="@+id/nav_applications" android:title="@string/menu_applications" />
+
+    <item android:id="@+id/nav_settings"     android:title="@string/menu_settings" />
+    <item android:id="@+id/nav_logout"       android:title="@string/logout" />
+
+</menu>

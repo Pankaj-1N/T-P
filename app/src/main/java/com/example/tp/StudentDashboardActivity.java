@@ -3,66 +3,73 @@ package com.example.tp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.card.MaterialCardView;
-import com.google.firebase.auth.FirebaseAuth;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.tp.ui.auth.LoginActivity;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class StudentDashboardActivity extends AppCompatActivity {
 
-    private MaterialToolbar topAppBar;
-    private MaterialCardView cardNotices, cardQA, cardPlacements,
-            cardProfile, cardSettings, cardLogout;
+    private FirebaseAuth mAuth;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.simple_placeholder);
-        setTitle("Student Dashboard");
+        setContentView(R.layout.activity_student_dashboard);
 
-        // Toolbar
-        topAppBar = findViewById(R.id.topAppBar);
-        if (topAppBar != null) {
-            topAppBar.setTitle("Student Dashboard");
+        mAuth = FirebaseAuth.getInstance();
+        drawerLayout = findViewById(R.id.drawerLayout);
+
+        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
+        NavigationView navigationView = findViewById(R.id.navigationView);
+
+        if (toolbar != null && drawerLayout != null) {
+            toolbar.setNavigationOnClickListener(v ->
+                    drawerLayout.openDrawer(GravityCompat.START)
+            );
         }
 
-        // Cards (use placeholders for now)
-        cardNotices    = findViewById(R.id.cardNotices);
-        cardQA         = findViewById(R.id.cardQA);
-        cardPlacements = findViewById(R.id.cardPlacements);
-        cardProfile    = findViewById(R.id.cardProfile);
-        cardSettings   = findViewById(R.id.cardSettings);
-        cardLogout     = findViewById(R.id.cardLogout);
+        if (navigationView != null) {
+            View header = navigationView.getHeaderView(0);
+            if (header != null) {
+                ImageView profileImage = header.findViewById(R.id.profileImage);
+                TextView studentName = header.findViewById(R.id.studentName);
 
-        // Card click listeners (wrap with try-catch for safety)
-        if (cardNotices != null) cardNotices.setOnClickListener(v -> startSafe(NoticesActivity.class));
-        if (cardQA != null) cardQA.setOnClickListener(v -> startSafe(QAManagementActivity.class));
-        if (cardPlacements != null) cardPlacements.setOnClickListener(v -> startSafe(PlacementRecordsActivity.class));
-        if (cardProfile != null) cardProfile.setOnClickListener(v -> startSafe(ProfileActivity.class));
-        if (cardSettings != null) cardSettings.setOnClickListener(v -> startSafe(SettingsActivity.class));
-        if (cardLogout != null) cardLogout.setOnClickListener(this::logout);
-    }
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (studentName != null && user != null) {
+                    String name = user.getDisplayName() != null ? user.getDisplayName() : user.getEmail();
+                    studentName.setText(name != null ? name : "Student Name");
+                }
+            }
 
-    private void startSafe(Class<?> cls) {
-        try {
-            startActivity(new Intent(this, cls));
-        } catch (Throwable t) {
-            Toast.makeText(this, "Screen missing: " + cls.getSimpleName(), Toast.LENGTH_SHORT).show();
+            navigationView.setNavigationItemSelectedListener(item -> {
+                int id = item.getItemId();
+                if (id == R.id.nav_logout) logout();
+                drawerLayout.closeDrawers();
+                return true;
+            });
         }
     }
 
-    private void logout(View v) {
-        try {
-            FirebaseAuth.getInstance().signOut();
-        } catch (Throwable ignored) {}
-        Intent i = new Intent(this, LoginActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(i);
-        finishAffinity();
+    private void logout() {
+        mAuth.signOut();
+        getSharedPreferences("tp_prefs", MODE_PRIVATE)
+                .edit()
+                .remove("ROLE")
+                .apply();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("fromLogout", true);
+        startActivity(intent);
+        finish();
     }
 }

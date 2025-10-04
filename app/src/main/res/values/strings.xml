@@ -1,4 +1,27 @@
 <resources>
     <string name="app_name">T&amp;P App</string>
 
+    <!-- Titles -->
+    <string name="title_student_dashboard">Student Dashboard</string>
+
+    <!-- Dashboard item labels -->
+    <string name="item_mock_tests">Mock Tests</string>
+    <string name="item_practice">Practice Questions</string>
+    <string name="item_syllabus">Syllabus</string>
+    <string name="item_notices">Notices</string>
+    <string name="item_companies_roles">Companies &amp; Roles</string>
+    <string name="item_applications">Applications / Status</string>
+    <string name="item_interview_prep">Interview Prep</string>
+    <string name="item_placement_calendar">Placement Calendar</string>
+
+    <!-- Drawer menu labels -->
+    <string name="menu_profile">Profile</string>
+    <string name="menu_syllabus">Syllabus</string>
+    <string name="menu_mock_tests">Mock Tests</string>
+    <string name="menu_practice">Practice Questions</string>
+    <string name="menu_notices">Notices</string>
+    <string name="menu_companies_roles">Companies &amp; Roles</string>
+    <string name="menu_applications">Applications / Status</string>
+    <string name="menu_settings">Settings</string>
+    <string name="logout">Logout</string>
 </resources>

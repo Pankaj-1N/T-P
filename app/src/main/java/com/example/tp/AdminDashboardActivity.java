@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Toast;
 import android.content.SharedPreferences;
 
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -26,6 +25,14 @@ public class AdminDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
+        // ---- ROLE GATE: allow only admin ----
+        String role = getSharedPreferences("tp_prefs", MODE_PRIVATE).getString("ROLE", null);
+        if (role == null || !"admin".equalsIgnoreCase(role)) {
+            startActivity(new Intent(this, StudentDashboardActivity.class));
+            finish();
+            return;
+        }
+
         // Toolbar
         topAppBar = findViewById(R.id.topAppBar);
         if (topAppBar != null) {
@@ -42,40 +49,13 @@ public class AdminDashboardActivity extends AppCompatActivity {
         cardLogout      = findViewById(R.id.cardLogout);
 
         // Clicks
-        if (cardNotices != null) {
-            cardNotices.setOnClickListener(v ->
-                    startSafe(ManageNoticesActivity.class));
-        }
-
-        if (cardQA != null) {
-            // open your QA management screen (you have both ManageQAActivity and QAManagementActivity)
-            cardQA.setOnClickListener(v ->
-                    startSafe(ManageQAActivity.class));
-        }
-
-        if (cardPlacements != null) {
-            cardPlacements.setOnClickListener(v ->
-                    startSafe(ManagePlacementsActivity.class));
-        }
-
-        if (cardStudents != null) {
-            cardStudents.setOnClickListener(v ->
-                    startSafe(ManageStudentsActivity.class));
-        }
-
-        if (cardProfile != null) {
-            cardProfile.setOnClickListener(v ->
-                    startSafe(ProfileActivity.class));
-        }
-
-        if (cardSettings != null) {
-            cardSettings.setOnClickListener(v ->
-                    startSafe(SettingsActivity.class));
-        }
-
-        if (cardLogout != null) {
-            cardLogout.setOnClickListener(this::logout);
-        }
+        if (cardNotices != null)   cardNotices.setOnClickListener(v -> startSafe(ManageNoticesActivity.class));
+        if (cardQA != null)        cardQA.setOnClickListener(v -> startSafe(ManageQAActivity.class));
+        if (cardPlacements != null)cardPlacements.setOnClickListener(v -> startSafe(ManagePlacementsActivity.class));
+        if (cardStudents != null)  cardStudents.setOnClickListener(v -> startSafe(ManageStudentsActivity.class));
+        if (cardProfile != null)   cardProfile.setOnClickListener(v -> startSafe(ProfileActivity.class));
+        if (cardSettings != null)  cardSettings.setOnClickListener(v -> startSafe(SettingsActivity.class));
+        if (cardLogout != null)    cardLogout.setOnClickListener(this::logout);
     }
 
     private void startSafe(Class<?> cls) {
@@ -94,13 +74,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
         prefs.edit().remove("ROLE").apply();
 
         // Relaunch LoginActivity as a fresh task and mark it's from logout
-        Intent i = new Intent(this, com.example.tp.ui.auth.LoginActivity.class);
+        Intent i = new Intent(this, LoginActivity.class);
         i.putExtra("fromLogout", true);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
-
-        // ❌ Do NOT call finishAffinity() here
     }
-
-
 }
